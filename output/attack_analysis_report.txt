@@ -1,0 +1,71 @@
+
+DOS ATTACK ANALYSIS REPORT - CIC IDS 2018 Dataset
+==================================================
+
+ANALYZED ATTACKS:
+1. DoS attacks-GoldenEye
+2. DoS attacks-Slowloris
+
+KEY FINDINGS FROM DATASET ANALYSIS:
+-----------------------------------
+
+GoldenEye Characteristics:
+- Shorter flow duration (mean: ~9.85 seconds)
+- Higher forward packet length (mean: 326 bytes)
+- More variable packet sizes (std: 191 bytes)
+- Higher packet count per flow (mean: 3.93 packets)
+
+Slowloris Characteristics:
+- Much longer flow duration (mean: ~73 seconds)
+- Smaller forward packet length (mean: 53 bytes)
+- More consistent packet sizes (std: 89 bytes)
+- Lower packet count per flow (mean: 2.34 packets)
+
+DISTINCTIVE FEATURES:
+---------------------
+1. Flow Duration (Distinctiveness: 2.14)
+   - GoldenEye: Short, bursty attacks
+   - Slowloris: Long, sustained connections
+
+2. Forward Packet Length Standard Deviation (Distinctiveness: 1.98)
+   - GoldenEye: Variable packet sizes
+   - Slowloris: Consistent packet sizes
+
+3. Forward Packet Length Maximum (Distinctiveness: 1.94)
+   - GoldenEye: Larger maximum packet sizes
+   - Slowloris: Smaller maximum packet sizes
+
+WIRESHARK ANALYSIS GUIDELINES:
+------------------------------
+
+For GoldenEye Attack (PCAP: goldeneye_attack.pcap):
+- Look for multiple HTTP GET requests from different IPs
+- Check for high rate of TCP SYN packets
+- Analyze HTTP header patterns
+- Monitor for server response codes
+
+For Slowloris Attack (PCAP: slowloris_attack.pcap):
+- Look for incomplete HTTP requests
+- Check for long-lasting TCP connections
+- Analyze timing between packet sends
+- Monitor for connection timeouts
+
+WIRESHARK FILTERS:
+------------------
+GoldenEye:
+  - http.request.method == "GET"
+  - tcp.flags.syn == 1
+  - ip.src == 192.168.1.0/24
+
+Slowloris:
+  - tcp.port == 80
+  - http
+  - tcp.analysis.ack_rtt > 1
+
+CONCLUSION:
+-----------
+Both attacks are DoS techniques but with different methodologies:
+- GoldenEye: HTTP flood with complete requests
+- Slowloris: Slow HTTP with partial requests
+
+Use the generated PCAP files for hands-on Wireshark analysis.
